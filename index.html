@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vhitefund | Empowering Dreams by Victor Edem</title>
+ <script type="module" src="/js/logic.js">
+
+    
+    </script>
+    
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <link href="/css/style.css" rel="stylesheet">
+
+</head>
+
+<body data-theme="dark">
+
+
+
+    <nav>
+
+        <div class="container nav-content">
+
+            <a href="#" class="logo" onclick="showView('browse')">
+
+                <i class="fas fa-bolt"></i> Vhitefund
+
+            </a>
+
+            <div class="nav-actions">
+
+                <button onclick="toggleTheme()" class="btn btn-outline btn-icon" id="theme-toggle">
+
+                    <i class="fas fa-sun"></i>
+
+                </button>
+
+      
+                <!-- Guest View -->
+
+                <div class="guest-only flex gap-2" id="nav-guest">
+
+                    <button onclick="openModal('login')" class="btn btn-outline">Login</button>
+
+                    <button onclick="openModal('register')" class="btn btn-primary">Join</button>
+
+                </div>
+
+
+
+                <!-- User View -->
+
+                <div class="auth-only flex gap-2" id="nav-auth">
+
+                    <button onclick="showView('create')" class="btn btn-primary">
+
+                        <i class="fas fa-plus"></i> <span>Start Campaign</span>
+
+                    </button>
+
+                    <button onclick="showView('profile')" class="btn btn-outline btn-icon" title="Profile">
+
+                        <i class="fas fa-user"></i>
+
+                    </button>
+
+                    <button onclick="handleLogout()" class="btn btn-outline btn-icon" title="Logout">
+
+                        <i class="fas fa-sign-out-alt"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <main class="container">
+
+        <!-- BROWSE -->
+
+        <section id="view-browse">
+
+            <div class="hero">
+
+                <h1>Fund the Future.</h1>
+
+                <p>Support medical, education, and creative projects. Secure crowdfunding for everyone.</p>
+
+            </div>
+
+            <div id="projects-grid" class="grid">
+
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+
+                    <div class="loader" style="margin: 0 auto 10px; border-top-color: var(--primary);"></div>
+
+                    <p>Loading projects...</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- CREATE -->
+
+        <section id="view-create" class="hidden" style="padding: 40px 0;">
+
+            <div class="modal-content" style="max-width: 600px; margin: 0 auto; display: block;">
+
+                <h2 style="margin-bottom: 24px;">Start your campaign</h2>
+
+                <form id="campaign-form">
+
+                    <div class="form-group">
+
+                        <label>Category</label>
+
+                        <select name="category">
+
+                            <option>Medical</option>
+
+                            <option>Education</option>
+
+                            <option>Business</option>
+
+                            <option>Charity</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Campaign Title</label>
+
+                        <input type="text" name="title" required placeholder="Help me pay for tuition...">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Story</label>
+
+                        <textarea name="description" rows="5" required placeholder="Explain why people should support you..."></textarea>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Goal Amount (₦)</label>
+
+                        <input type="number" name="goal" required placeholder="100000">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px;">Launch Campaign</button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PROFILE -->
+
+        <section id="view-profile" class="hidden" style="padding-bottom: 60px;">
+
+            <div id="profile-content">
+
+                <div class="profile-header">
+
+                    <div class="avatar-lg" id="profile-avatar">U</div>
+
+                    <div>
+
+                        <h2 id="profile-name">User Name</h2>
+
+                        <p id="profile-email" style="color: var(--text-muted);"></p>
+
+                    </div>
+
+                </div>
+
+                <h3 style="margin-bottom: 20px;">Your Campaigns</h3>
+
+                <div id="user-projects-grid" class="grid">
+
+                    <!-- User projects will load here -->
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- DETAIL -->
+
+        <section id="view-detail" class="hidden" style="padding: 40px 0;">
+
+            <div id="detail-box"></div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- AUTH MODAL -->
+
+    <div id="modal-auth" class="modal">
+
+        <div class="modal-content">
+
+            <button onclick="closeModal()" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+            
+
+            <div id="auth-error" class="alert alert-error"></div>
+
+            <div id="auth-success" class="alert alert-success"></div>
+
+
+
+            <!-- Login Section -->
+
+            <div id="section-login">
+
+                <h2>Welcome Back</h2>
+
+                <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem;">Sign in to your Vhitefund account.</p>
+
+                <form id="login-form">
+
+                    <div class="form-group">
+
+                        <label>Email Address</label>
+
+                        <input type="email" id="login-email" required placeholder="name@example.com">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Password</label>
+
+                        <input type="password" id="login-password" required placeholder="••••••••">
+
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+
+                        <a href="javascript:void(0)" onclick="openModal('reset')" style="color: var(--primary); text-decoration: none; font-size: 0.8rem; font-weight: 600;">Forgot Password?</a>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">Login</button>
+
+                </form>
+
+                <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+
+                    Don't have an account? <a href="javascript:void(0)" onclick="openModal('register')" style="color: var(--primary); text-decoration: none; font-weight: 700;">Join now</a>
+
+                </p>
+
+            </div>
+
+
+
+            <!-- Register Section -->
+
+            <div id="section-register" class="hidden">
+
+                <h2>Create Account</h2>
+
+                <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem;">Join Vhitefund and start changing lives.</p>
+
+                <form id="register-form">
+
+                    <div class="form-group">
+
+                        <label>Full Name</label>
+
+                        <input type="text" id="reg-name" required placeholder="Victor Edem">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Email Address</label>
+
+                        <input type="email" id="reg-email" required placeholder="name@example.com">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Password</label>
+
+                        <input type="password" id="reg-password" required placeholder="Min. 6 characters">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">Sign Up</button>
+
+                </form>
+
+                <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+
+                    Already have an account? <a href="javascript:void(0)" onclick="openModal('login')" style="color: var(--primary); text-decoration: none; font-weight: 700;">Login</a>
+
+                </p>
+
+            </div>
+
+
+
+            <!-- Password Reset Section -->
+
+            <div id="section-reset" class="hidden">
+
+                <h2>Reset Password</h2>
+
+                <p style="color: var(--text-muted); margin-bottom: 24px; font-size: 0.9rem;">Enter your email and we’ll send you a password reset link.</p>
+
+                <form id="reset-form">
+
+                    <div class="form-group">
+
+                        <label>Username / Full Name</label>
+
+                        <input type="text" id="reset-name" required placeholder="Enter your full name">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Email Address</label>
+
+                        <input type="email" id="reset-email" required placeholder="Enter your registered email">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">Send Reset Link</button>
+
+                </form>
+
+                <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+
+                    Remembered? <a href="javascript:void(0)" onclick="openModal('login')" style="color: var(--primary); text-decoration: none; font-weight: 700;">Back to Login</a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <footer>
+
+        <p>&copy; 2026 Vhitefund. Created by Victor Edem.</p>
+
+    </footer>
+
+</body>
+
+</html>
